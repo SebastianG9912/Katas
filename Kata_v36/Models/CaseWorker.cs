@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using Scheduler.Exceptions;
 
 namespace Scheduler.Models
@@ -27,12 +28,25 @@ namespace Scheduler.Models
         {
             Meeting newMeeting = new Meeting(start);
 
+            bool freeTime = true; //Lade också till så att den inte dubbelbokar ändå
             foreach (Meeting meeting in Meetings)
             {
                 // TODO kasta MeetingOverlapException om två möten överlappar
+                try
+                {
+                    if (meeting.Overlap(newMeeting))
+                    {
+                        freeTime = false;
+                        throw new MeetingOverlapException(meeting);
+                    }
+                }
+                catch (MeetingOverlapException e)
+                {
+                    MessageBox.Show(e.Message);
+                }
             }
-
-            Meetings.Add(newMeeting);
+            if(freeTime) //Lade också till så att den inte dubbelbokar ändå
+                Meetings.Add(newMeeting);
         }
 
         public void ChangeMeeting(int index, DateTime newStart)
@@ -46,8 +60,11 @@ namespace Scheduler.Models
                     continue;
 
                 // TODO kasta MeetingOverlapException om två möten överlappar
+                if (meeting.Overlap(attemptMeeting))
+                {
+                    throw new MeetingOverlapException(meeting);
+                }
             }
-
             meetingToChange.Start = newStart;
         }
     }

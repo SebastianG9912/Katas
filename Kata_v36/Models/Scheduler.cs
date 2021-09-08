@@ -45,7 +45,9 @@ namespace Scheduler.Models
 
                     if (meeting.Applicant == null)
                     {
-                        int randomIndex = 0; //TODO detta är inte slumpat.
+                        //int randomIndex = 0; //TODO detta är inte slumpat.
+                        Random rand = new Random();
+                        int randomIndex = rand.Next(0, UnassignedApplicants.Count);
 
                         meeting.Applicant = UnassignedApplicants[randomIndex];
                         UnassignedApplicants.RemoveAt(randomIndex);

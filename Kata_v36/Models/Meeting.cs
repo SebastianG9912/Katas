@@ -33,7 +33,11 @@ namespace Scheduler.Models
         {
             string date = Start.ToString("d'/'M'/'yy");
 
-            string info = date;
+            string timeStart = Start.ToString("H:mm");
+            DateTime end = Start + Duration;
+            string timeEnd = end.ToString("H:mm");
+            
+            string info = $"{date}  {timeStart} - {timeEnd}";
 
             if (Applicant != null)
                 info += " with: " + Applicant.Name;
